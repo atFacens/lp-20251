@@ -3,16 +3,22 @@ package br.facens.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import br.facens.model.Cliente;
 
+
+/* 
+ 
+CRUD = Create, Read, Update, Delete
+
+*/
 public class ClienteDAO {
     private static final String url = "jdbc:mysql://localhost:3306/aulalp_facens";
     private static final String username = "profFacens"; //root
     private static final String password = "aula"; //root
-
 
     public static void conectBD() {
         Connection connection;
@@ -75,6 +81,31 @@ public class ClienteDAO {
             return false;
         }
     }
+
+    public static Cliente buscar(int id) {
+        String sql = "Select * from cliente where id = ?;";
+
+        try (
+           Connection connection = DriverManager.getConnection(url, username, password);
+           PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setInt(1, id);
+            ResultSet result= preparedStatement.executeQuery();
+
+            if(result.next()) {
+                int idClient = result.getInt("id");
+                String name = result.getString("nome");
+                String email = result.getString("email");
+
+                Cliente cliente = new Cliente(idClient, name, email);
+                return cliente;
+            }
+            return null;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    } 
 
 }
 

@@ -37,7 +37,7 @@ public class Main {
         do {
             System.out.println("1. Inserir novo cliente");
             System.out.println("2. Buscar um cliente");
-            System.out.println("3. Atualizar o cliente");
+            System.out.println("3. Atualizar o email");
             System.out.println("4. Apagar um cliente");
             System.out.println("5. sair");
             opcao = Integer.parseInt(scanner.nextLine());
@@ -52,7 +52,7 @@ public class Main {
                     email = scanner.nextLine();
 
                     cliente = new Cliente(id, name, email);
-                    if(ClienteDAO.inserir(cliente)) {
+                    if (ClienteDAO.inserir(cliente)) {
                         System.out.println("Clienete inserido com sucesso");
                     } else {
                         System.out.println("Falha na inserção");
@@ -73,15 +73,37 @@ public class Main {
                     break;
 
                 case 3:
+                    System.out.println("Informe o ID do cliente");
+                    id = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Informe o email do cliente");
+                    email = scanner.nextLine();
+
+                    boolean atualizado = ClienteDAO.atualizarEmail(id, email);
+
+                    if (atualizado) {
+                        System.out.println("Email atualizado com sucesso");
+                    } else {
+                        System.out.println("Erro ao atualizar");
+                    }
 
                     break;
 
                 case 4:
+                    System.out.println("Qual o id do cliente?");
+                    id = Integer.parseInt(scanner.nextLine());
+
+                    boolean apagou = ClienteDAO.apagar(id);
+
+                    if (apagou) {
+                        System.out.println("Cliente apagado");
+                    } else {
+                        System.out.println("Não foi possível apagar o cliente com ID " + id);
+                    }
 
                     break;
 
                 case 5:
-
+                    System.out.println("Programa encerrado.");
                     break;
 
                 default:
@@ -90,7 +112,7 @@ public class Main {
             }
 
         } while (opcao != 5);
-        
+
         scanner.close();
     }
 }

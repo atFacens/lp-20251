@@ -9,7 +9,6 @@ import java.sql.Statement;
 
 import br.facens.model.Cliente;
 
-
 /* 
  
 CRUD = Create, Read, Update, Delete
@@ -106,6 +105,51 @@ public class ClienteDAO {
             return null;
         }
     } 
+
+    public static boolean atualizarEmail(int id, String email) {
+        String sql = "update cliente set email = ? where id = ?;";
+
+        try (
+            Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, id);
+
+            int result = preparedStatement.executeUpdate();
+
+            if(result == 1) {
+                return true;
+            }
+
+            return false;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    public static boolean apagar(int id) {
+        String sql = "delete from cliente where id = ?;";
+
+        try (
+            Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setInt(1, id);
+
+            int result = preparedStatement.executeUpdate();
+
+            if(result  > 0) {
+                return true;
+            }
+
+            return false;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 
 }
 

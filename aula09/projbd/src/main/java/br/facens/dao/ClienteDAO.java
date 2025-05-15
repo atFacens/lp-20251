@@ -62,12 +62,12 @@ public class ClienteDAO {
             System.out.println("Conectando ao BD...");
             connection = DriverManager.getConnection(url, username, password);
 
-            String sql = "insert into cliente values(?,?,?)";
+            String sql = "insert into cliente (nome, email) values(?,?)";
             
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, cliente.getId());
-            preparedStatement.setString(2, cliente.getName());
-            preparedStatement.setString(3, cliente.getEmail());
+            // preparedStatement.setInt(1, cliente.getId());
+            preparedStatement.setString(1, cliente.getName());
+            preparedStatement.setString(2, cliente.getEmail());
 
             int result = preparedStatement.executeUpdate();
 

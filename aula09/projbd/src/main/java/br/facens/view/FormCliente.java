@@ -6,9 +6,8 @@ package br.facens.view;
 
 import javax.swing.JOptionPane;
 
-import com.mysql.cj.protocol.x.Ok;
-
 import br.facens.controller.ClienteController;
+import br.facens.model.Cliente;
 
 /**
  *
@@ -124,8 +123,6 @@ public class FormCliente extends javax.swing.JFrame {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
         String name = txtNome.getText();
         String email = txtEmail.getText();
-        System.out.println(name);
-        System.out.println(email);
 
         boolean inserido = ClienteController.inserirCliente(name, email);
 
@@ -133,22 +130,78 @@ public class FormCliente extends javax.swing.JFrame {
             txtNome.setText("");
             txtEmail.setText("");
             JOptionPane.showMessageDialog(this, "Inserido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {    
+        } else {
             JOptionPane.showMessageDialog(this, "Não foi possíve inserir o cliente", "Falha",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void btnLerActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLerActionPerformed
+        String idTxt = txtId.getText();
+        int id = Integer.parseInt(idTxt);
+
+        Cliente cliente = ClienteController.buscarPorId(id);
+
+        if (cliente != null) {
+            txtNome.setText(cliente.getName());
+            txtEmail.setText(cliente.getEmail());
+            JOptionPane.showMessageDialog(this, "Cliente encontrado", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            txtNome.setText("");
+            txtEmail.setText("");
+            JOptionPane.showMessageDialog(this, "Não foi possíve encontrar o cliente", "Falha",
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
     }// GEN-LAST:event_btnLerActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAtualizarActionPerformed
-        // TODO add your handling code here:
+        String idTxt = txtId.getText();
+        int id = Integer.parseInt(idTxt);
+        String email = txtEmail.getText();
+
+        boolean atualizou = ClienteController.atualizarEmail(id, email);
+
+        if (atualizou) {
+            Cliente cliente = ClienteController.buscarPorId(id);
+
+            txtNome.setText(cliente.getName());
+            txtEmail.setText(cliente.getEmail());
+            JOptionPane.showMessageDialog(this, "email atualizado", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            txtNome.setText("");
+            txtEmail.setText("");
+            JOptionPane.showMessageDialog(this, "Não foi possíve atualizar", "Falha",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
     }// GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnApagarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnApagarActionPerformed
-        // TODO add your handling code here:
+        String idTxt = txtId.getText();
+        int id;
+
+        try {
+            id = Integer.parseInt(idTxt);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Este id é inválido id=" + idTxt, "Falha",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean apagou = ClienteController.apagarCliente(id);
+
+        if (apagou) {
+            txtId.setText("");
+            txtNome.setText("");
+            txtEmail.setText("");
+            JOptionPane.showMessageDialog(this, "Cliente removido: id=" + id, "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Não foi possível remover o cliente id=" + id, "Falha",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
     }// GEN-LAST:event_btnApagarActionPerformed
 
     /**
